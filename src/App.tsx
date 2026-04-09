@@ -6,7 +6,7 @@ import LeadAgingPanel from './components/LeadAgingPanel';
 import BranchDrilldown from './components/BranchDrilldown';
 
 export default function App() {
-  const { data, activeBranch, setActiveBranch } = useData();
+  const { data, activeBranch, setActiveBranch, activeMonth, setActiveMonth } = useData();
   const [activeTab, setActiveTab] = useState<'overview' | 'branches' | 'insights'>('overview');
 
   return (
@@ -53,20 +53,43 @@ export default function App() {
         <header className="h-20 border-b border-border bg-card/50 flex items-center justify-between px-8">
           <h2 className="text-xl font-semibold capitalize">{activeTab} Dashboard</h2>
           
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground font-medium">Branch Filter:</span>
-            <div className="relative">
-              <select 
-                value={activeBranch}
-                onChange={(e) => setActiveBranch(e.target.value)}
-                className="appearance-none bg-background border border-border text-foreground py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
-              >
-                <option value="all">All Branches</option>
-                {data.branches.map(b => (
-                  <option key={b.id} value={b.id}>{b.name} ({b.city})</option>
-                ))}
-              </select>
-              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-muted-foreground font-medium">Month:</span>
+              <div className="relative">
+                <select 
+                  value={activeMonth}
+                  onChange={(e) => setActiveMonth(e.target.value)}
+                  className="appearance-none bg-background border border-border text-foreground py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+                >
+                  <option value="all">All Year</option>
+                  <option value="06">June</option>
+                  <option value="07">July</option>
+                  <option value="08">August</option>
+                  <option value="09">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+                <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-muted-foreground font-medium">Branch:</span>
+              <div className="relative">
+                <select 
+                  value={activeBranch}
+                  onChange={(e) => setActiveBranch(e.target.value)}
+                  className="appearance-none bg-background border border-border text-foreground py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+                >
+                  <option value="all">All Branches</option>
+                  {data.branches.map(b => (
+                    <option key={b.id} value={b.id}>{b.name}</option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+              </div>
             </div>
           </div>
         </header>

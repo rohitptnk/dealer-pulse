@@ -17,5 +17,7 @@ This document tracks the key product, design, and technical decisions made durin
 *   **Reasoning:** Combined with Vite, standard client-side mapping over the 600KB file is both easiest and adequately performant.
 
 ## Log of Made Decisions
-*(This section will be updated as we make choices)*
-- TBD
+
+### 4. Month Filtering vs Action Items
+*   **Choice:** The global "Month" filter applies to the Overview and Branch Drilldown components, but the "Action Required" (Lead Aging) component ignores it.
+*   **Reasoning:** A time filter typically slices data chronologically (e.g. leads created in June), but actionable insights are inherently tied to the present day. If a user filters by June, they would see zero cold leads (because June leads are fully resolved by December). Decoupling it ensures the manager always sees exactly what needs attention *today*, but scoped strictly to their `activeBranch` filter.

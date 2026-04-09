@@ -4,10 +4,10 @@ import { findColdLeads } from '../utils/metrics';
 import { AlertTriangle, Clock, PhoneForwarded } from 'lucide-react';
 
 export default function LeadAgingPanel() {
-  const { data, filteredLeads } = useData();
+  const { data, branchFilteredLeads } = useData();
 
-  // Find leads that haven't been contacted in 7+ days
-  const coldLeads = useMemo(() => findColdLeads(filteredLeads, data.leads, 7), [filteredLeads, data.leads]);
+  // Find leads that haven't been contacted in 7+ days (ignores month filter)
+  const coldLeads = useMemo(() => findColdLeads(branchFilteredLeads, data.leads, 7), [branchFilteredLeads, data.leads]);
 
   const mapRepName = (repId: string) => {
     return data.sales_reps.find(r => r.id === repId)?.name || repId;

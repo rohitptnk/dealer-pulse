@@ -8,9 +8,10 @@ interface DataContextType {
   data: DealerData;
   activeBranch: string; // 'all' or branch_id
   setActiveBranch: (id: string) => void;
-  activeMonth: string; // 'all' or '6', '7', etc (0-indexed month or 1-indexed? Let's use 'all' or '01' to '12')
+  activeMonth: string; // 'all' or '06', '07', etc
   setActiveMonth: (m: string) => void;
-  filteredLeads: Lead[];
+  filteredLeads: Lead[];      // Filtered by BOTH branch and month
+  branchFilteredLeads: Lead[]; // Filtered ONLY by branch (for action required tab)
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -19,11 +20,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [activeBranch, setActiveBranch] = useState<string>('all');
   const [activeMonth, setActiveMonth] = useState<string>('all');
 
-  const filteredLeads = useMemo(() => {
+  const branchFilteredLeads = useMemo(() => {
     let leads = data.leads;
     if (activeBranch !== 'all') {
       leads = leads.filter(l => l.branch_id === activeBranch);
     }
+    return leads;
+  }, [activeBranch]);
+
+  const filteredLeads = useMemo(() => {
+    let leads = branchFilteredLeads;
     if (activeMonth !== 'all') {
       // Extract numeric month (1-indexed string like '06') from '2025-06-01'
       leads = leads.filter(l => {
@@ -32,7 +38,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       });
     }
     return leads;
-  }, [activeBranch, activeMonth]);
+  }, [branchFilteredLeads, activeMonth]);
 
   return (
     <DataContext.Provider value={{
@@ -41,7 +47,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       setActiveBranch,
       activeMonth,
       setActiveMonth,
-      filteredLeads
+      filteredLeads,
+      branchFilteredLeads
     }}>
       {children}
     </DataContext.Provider>

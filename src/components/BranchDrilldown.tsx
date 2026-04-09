@@ -3,7 +3,7 @@ import { useData } from '../context/DataContext';
 import { calculateRevenue, calculateUnitsSold, calculateWinRate } from '../utils/metrics';
 
 export default function BranchDrilldown() {
-  const { data, activeBranch, setActiveBranch } = useData();
+  const { data, activeBranch, setActiveBranch, filteredLeads } = useData();
 
   // If a specific branch is selected, show its sales reps instead of all branches.
   const isAll = activeBranch === 'all';
@@ -12,7 +12,7 @@ export default function BranchDrilldown() {
     if (isAll) {
       // Show stats by branch
       return data.branches.map(branch => {
-        const leads = data.leads.filter(l => l.branch_id === branch.id);
+        const leads = filteredLeads.filter(l => l.branch_id === branch.id);
         const reps = data.sales_reps.filter(r => r.branch_id === branch.id).length;
         return {
           id: branch.id,
@@ -27,7 +27,7 @@ export default function BranchDrilldown() {
       // Show stats by sales rep in this branch
       const reps = data.sales_reps.filter(r => r.branch_id === activeBranch);
       return reps.map(rep => {
-        const leads = data.leads.filter(l => l.assigned_to === rep.id);
+        const leads = filteredLeads.filter(l => l.assigned_to === rep.id);
         return {
           id: rep.id,
           name: rep.name,
@@ -38,7 +38,7 @@ export default function BranchDrilldown() {
         };
       }).sort((a, b) => b.revenue - a.revenue);
     }
-  }, [data, activeBranch, isAll]);
+  }, [data, activeBranch, isAll, filteredLeads]);
 
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);

@@ -7,7 +7,7 @@ export default function LeadAgingPanel() {
   const { data, filteredLeads } = useData();
 
   // Find leads that haven't been contacted in 7+ days
-  const coldLeads = useMemo(() => findColdLeads(filteredLeads, 7), [filteredLeads]);
+  const coldLeads = useMemo(() => findColdLeads(filteredLeads, data.leads, 7), [filteredLeads, data.leads]);
 
   const mapRepName = (repId: string) => {
     return data.sales_reps.find(r => r.id === repId)?.name || repId;

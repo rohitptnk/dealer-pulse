@@ -40,9 +40,9 @@ export function calculateWinRate(leads: Lead[]): number {
  * its last activity is older than `thresholdDays`.
  * Note: Since current data might be fixed to Dec 2025, we act relative to the last activity in the dataset.
  */
-export function findColdLeads(leads: Lead[], thresholdDays: number = 7): Lead[] {
-  // Find the max date in the dataset to act as "today" to make the insight work with static data.
-  const latestDateStr = leads.reduce((max, lead) => {
+export function findColdLeads(leads: Lead[], allLeads: Lead[], thresholdDays: number = 7): Lead[] {
+  // Find the max date in the ENTIRE dataset to act as "today" to make the insight work with static data.
+  const latestDateStr = allLeads.reduce((max, lead) => {
     return lead.last_activity_at > max ? lead.last_activity_at : max;
   }, "2000-01-01T00:00:00Z");
   
@@ -50,7 +50,7 @@ export function findColdLeads(leads: Lead[], thresholdDays: number = 7): Lead[] 
   
   return leads.filter(lead => {
     // Only flag active leads
-    if (lead.status === 'delivered' || lead.status === 'lost') return false;
+    if (lead.status === 'delivered' || lead.status === 'order_placed' || lead.status === 'lost') return false;
     
     const lastActivity = new Date(lead.last_activity_at).getTime();
     const daysSinceLastActivity = (today - lastActivity) / (1000 * 3600 * 24);

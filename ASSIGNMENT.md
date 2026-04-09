@@ -1,5 +1,10 @@
 # Forward Deployed Engineer — Take-Home Assignment
 
+> **Project Progress Update:**
+> - [x] Initial Readme & TODO created: [README.md](./README.md)
+> - [x] Key architectural & product decisions drafted: [DECISIONS.md](./DECISIONS.md)
+> - *We will keep this document as an unedited reference and manage our progress and steps in the README.*
+
 ## DealerPulse: Real-Time Dealership Performance Dashboard
 
 ### Context

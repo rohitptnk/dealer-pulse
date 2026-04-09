@@ -6,7 +6,7 @@ import { IndianRupee, Car, Target } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Overview() {
-  const { filteredLeads, activeBranch } = useData();
+  const { filteredLeads, activeBranch, data, activeMonth } = useData();
 
   const metrics = useMemo(() => {
     return {
@@ -16,9 +16,27 @@ export default function Overview() {
     };
   }, [filteredLeads]);
 
-  // Dummy target calculation since targets might not be fully mapped in dataset
-  const targetRevenue = activeBranch === 'all' ? 50000000 : 10000000; 
-  const targetUnits = activeBranch === 'all' ? 200 : 40;
+  // Calculate real targets from the dataset
+  const { targetRevenue, targetUnits } = useMemo(() => {
+    let relevantTargets = data.targets || [];
+    
+    // Filter targets by branch if not 'all'
+    if (activeBranch !== 'all') {
+      relevantTargets = relevantTargets.filter(t => t.branch_id === activeBranch);
+    }
+    
+    // Filter targets by month if not 'all'. Target month format is "2025-06"
+    if (activeMonth !== 'all') {
+      relevantTargets = relevantTargets.filter(t => t.month.split('-')[1] === activeMonth);
+    }
+    
+    // Sum up the remaining targets (handles "all branches" or "all months" by naturally summing them)
+    return relevantTargets.reduce((acc, curr) => ({
+      targetRevenue: acc.targetRevenue + curr.target_revenue,
+      targetUnits: acc.targetUnits + curr.target_units
+    }), { targetRevenue: 0, targetUnits: 0 });
+    
+  }, [data.targets, activeBranch, activeMonth]);
 
   // Aggregate leads by month for the chart
   const chartData = useMemo(() => {
@@ -52,13 +70,13 @@ export default function Overview() {
         <MetricCard 
           title="Total Revenue" 
           value={formatCurrency(metrics.revenue)} 
-          subtext={`${((metrics.revenue / targetRevenue) * 100).toFixed(1)}% of Target`}
+          subtext={targetRevenue > 0 ? `${((metrics.revenue / targetRevenue) * 100).toFixed(1)}% of Target` : 'Target N/A'}
           icon={<IndianRupee className="w-5 h-5 text-primary" />} 
         />
         <MetricCard 
           title="Units Sold" 
           value={metrics.units.toString()} 
-          subtext={`${((metrics.units / targetUnits) * 100).toFixed(1)}% of Target`}
+          subtext={targetUnits > 0 ? `${((metrics.units / targetUnits) * 100).toFixed(1)}% of Target` : 'Target N/A'}
           icon={<Car className="w-5 h-5 text-primary" />} 
         />
         <MetricCard 

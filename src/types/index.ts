@@ -35,11 +35,18 @@ export interface Lead {
   lost_reason: string | null;
 }
 
+export interface Target {
+  branch_id: string;
+  month: string;
+  target_units: number;
+  target_revenue: number;
+}
+
 export interface DealerData {
   metadata: Record<string, string>;
   branches: Branch[];
   sales_reps: SalesRep[];
   leads: Lead[];
   delivery_records?: any[];
-  targets?: any[];
+  targets: Target[];
 }

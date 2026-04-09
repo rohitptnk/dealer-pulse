@@ -22,6 +22,9 @@ For the open-ended "differentiator" requirement, I chose to implement **Lead Agi
 
 ## 3. What I'd Build Next With More Time
 
+* Move the data to postgres database to do sql operations using a langchain agent.
+* better css components instead of inline css
+
 *   **Conversion Funnel Visualizations:** I would implement a Sankey diagram visualizer mapping the drop-off rates between `contacted` ➔ `test_drive` ➔ `order_placed` to identify exactly *where* in the pipeline reps lose the most customers.
 *   **Target vs. Actual Burn-down:** Currently, targets act as static benchmarks. I would build a time-based burn-down chart projecting the current sales velocity against the end-of-month target line.
 *   **Postgres & API Migration:** To make this production-ready for continuous live data ingestion across years, I would migrate the data layer from static JSON into a PostgreSQL database and create a lightweight API layer for paginated fetching.

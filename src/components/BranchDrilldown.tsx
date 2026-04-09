@@ -54,7 +54,7 @@ export default function BranchDrilldown() {
         {!isAll && (
           <button 
             onClick={() => setActiveBranch('all')}
-            className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-muted transition-colors font-medium"
+            className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-muted transition-colors font-medium cursor-pointer"
           >
             ← Back to All Branches
           </button>

@@ -14,10 +14,13 @@ export default function App() {
       {/* Sidebar */}
       <aside className="w-64 border-r border-border bg-card flex flex-col">
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-primary flex items-center gap-2">
+          <button 
+            onClick={() => setActiveTab('overview')}
+            className="text-2xl font-bold text-primary flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer focus:outline-none"
+          >
             <Activity className="w-6 h-6" />
             DealerPulse
-          </h1>
+          </button>
         </div>
         
         <nav className="flex-1 px-4 space-y-2">

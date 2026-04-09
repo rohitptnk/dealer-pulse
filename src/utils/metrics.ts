@@ -28,9 +28,9 @@ export function calculateUnitsSold(leads: Lead[]): number {
  * Calculates win rate (closed won / total closed)
  */
 export function calculateWinRate(leads: Lead[]): number {
-  const closed = leads.filter(l => l.status === 'delivered' || l.status === 'lost');
+  const closed = leads.filter(l => l.status === 'delivered' || l.status === 'order_placed' || l.status === 'lost');
   if (closed.length === 0) return 0;
-  const won = closed.filter(l => l.status === 'delivered').length;
+  const won = closed.filter(l => l.status === 'delivered' || l.status === 'order_placed').length;
   return (won / closed.length) * 100;
 }
 
